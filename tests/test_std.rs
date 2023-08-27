@@ -1,9 +1,12 @@
+#[path = "../wrappers.rs"]
+mod wrappers;
+
 use quickcheck as qc;
 use rand::{distributions::{Distribution, Standard}, Rng, SeedableRng, rngs::StdRng};
 use rand::{seq::SliceRandom, thread_rng};
 use std::{cmp::min, fmt::Debug, marker::PhantomData};
 use itertools as it;
-use crate::it::Itertools;
+use crate::{it::Itertools, wrappers::Ext};
 use crate::it::ExactlyOneError;
 use crate::it::multizip;
 use crate::it::multipeek;
@@ -121,12 +124,12 @@ fn unique() {
 #[test]
 fn intersperse() {
     let xs = ["a", "", "b", "c"];
-    let v: Vec<&str> = xs.iter().cloned().intersperse(", ").collect();
+    let v: Vec<&str> = xs.iter().cloned().intersperse_wrap(", ").collect();
     let text: String = v.concat();
     assert_eq!(text, "a, , b, c".to_string());
 
     let ys = [0, 1, 2, 3];
-    let mut it = ys[..0].iter().copied().intersperse(1);
+    let mut it = ys[..0].iter().copied().intersperse_wrap(1);
     assert!(it.next() == None);
 }
 

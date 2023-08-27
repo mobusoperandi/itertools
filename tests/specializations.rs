@@ -1,6 +1,11 @@
+#[path = "../wrappers.rs"]
+mod wrappers;
+
 use itertools::Itertools;
 use std::fmt::Debug;
 use quickcheck::quickcheck;
+
+use crate::wrappers::Ext;
 
 struct Unspecialized<I>(I);
 impl<I> Iterator for Unspecialized<I>
@@ -74,7 +79,7 @@ fn test_specializations<IterItem, Iter>(
 
 quickcheck! {
     fn intersperse(v: Vec<u8>) -> () {
-        test_specializations(&v.into_iter().intersperse(0));
+        test_specializations(&v.into_iter().intersperse_wrap(0));
     }
 }
 

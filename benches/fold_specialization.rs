@@ -1,5 +1,9 @@
+#[path = "../wrappers.rs"]
+mod wrappers;
+
+use wrappers::Ext;
+
 use criterion::{criterion_group, criterion_main, Criterion};
-use itertools::Itertools;
 
 struct Unspecialized<I>(I);
 
@@ -32,7 +36,7 @@ mod specialization {
             c.bench_function("external", move |b| {
                 b.iter(|| {
                     let mut sum = 0;
-                    for &x in arr.iter().intersperse(&0) {
+                    for &x in arr.iter().intersperse_wrap(&0) {
                         sum += x;
                     }
                     sum
@@ -46,7 +50,7 @@ mod specialization {
 
             c.bench_function("internal specialized", move |b| {
                 b.iter(|| {
-                    arr.iter().intersperse(&0).fold(0, |acc, x| acc + x)
+                    arr.iter().intersperse_wrap(&0).fold(0, |acc, x| acc + x)
                 })
             });
         }
@@ -57,7 +61,7 @@ mod specialization {
 
             c.bench_function("internal unspecialized", move |b| {
                 b.iter(|| {
-                    Unspecialized(arr.iter().intersperse(&0)).fold(0, |acc, x| acc + x)
+                    Unspecialized(arr.iter().intersperse_wrap(&0)).fold(0, |acc, x| acc + x)
                 })
             });
         }

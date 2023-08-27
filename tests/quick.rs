@@ -3,6 +3,9 @@
 //!
 //! In particular we test the tedious size_hint and exact size correctness.
 
+#[path = "../wrappers.rs"]
+mod wrappers;
+
 use quickcheck as qc;
 use std::default::Default;
 use std::num::Wrapping;
@@ -24,13 +27,16 @@ use itertools::free::{
     put_back,
     put_back_n,
     rciter,
-    zip,
     zip_eq,
 };
+
+use wrappers::free::zip;
 
 use rand::Rng;
 use rand::seq::SliceRandom;
 use quickcheck::TestResult;
+
+use crate::wrappers::Ext;
 
 /// Trait for size hint modifier types
 trait HintKind: Copy + Send + qc::Arbitrary {
@@ -635,12 +641,12 @@ quickcheck! {
         exact_size_for_this(a.iter().interleave_shortest(&b))
     }
     fn size_intersperse(a: Iter<i16>, x: i16) -> bool {
-        correct_size_hint(a.intersperse(x))
+        correct_size_hint(a.intersperse_wrap(x))
     }
     fn equal_intersperse(a: Vec<i32>, x: i32) -> bool {
         let mut inter = false;
         let mut i = 0;
-        for elt in a.iter().cloned().intersperse(x) {
+        for elt in a.iter().cloned().intersperse_wrap(x) {
             if inter {
                 if elt != x { return false }
             } else {
@@ -1243,8 +1249,8 @@ quickcheck! {
             return TestResult::discard();
         }
 
-        let min = cloned(&a).fold1(f64::min);
-        let max = cloned(&a).fold1(f64::max);
+        let min = cloned(&a).fold1_wrap(f64::min);
+        let max = cloned(&a).fold1_wrap(f64::max);
 
         let minmax = cloned(&a).minmax();
         let expected = match a.len() {
@@ -1405,7 +1411,7 @@ quickcheck! {
             .map(|i| (i % modulo, i))
             .into_group_map()
             .into_iter()
-            .map(|(key, vals)| (key, vals.into_iter().fold1(|acc, val| acc + val).unwrap()))
+            .map(|(key, vals)| (key, vals.into_iter().fold1_wrap(|acc, val| acc + val).unwrap()))
             .collect::<HashMap<_,_>>();
         assert_eq!(lookup, group_map_lookup);
 

@@ -1,5 +1,9 @@
+#[path = "../wrappers.rs"]
+mod wrappers;
+
 use criterion::{criterion_group, criterion_main, Criterion};
 use itertools::{Itertools, cloned};
+use wrappers::Ext;
 
 trait IterEx : Iterator {
     // Another efficient implementation against which to compare,
@@ -18,7 +22,7 @@ trait IterEx : Iterator {
             }
             stack.push(x);
         });
-        stack.into_iter().fold1(f)
+        stack.into_iter().fold1_wrap(f)
     }
 }
 impl<T:Iterator> IterEx for T {}
@@ -79,7 +83,7 @@ macro_rules! def_benchs {
 
 def_benchs!{
     10_000,
-    fold1,
+    fold1_wrap,
     fold1_10k,
 }
 
@@ -97,7 +101,7 @@ def_benchs!{
 
 def_benchs!{
     100,
-    fold1,
+    fold1_wrap,
     fold1_100,
 }
 
@@ -115,7 +119,7 @@ def_benchs!{
 
 def_benchs!{
     8,
-    fold1,
+    fold1_wrap,
     fold1_08,
 }
 

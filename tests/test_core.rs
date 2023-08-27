@@ -5,6 +5,9 @@
 //! except according to those terms.
 #![no_std]
 
+#[path = "../wrappers.rs"]
+mod wrappers;
+
 use core::iter;
 use itertools as it;
 use crate::it::Itertools;
@@ -16,6 +19,7 @@ use crate::it::free::put_back;
 use crate::it::iproduct;
 use crate::it::izip;
 use crate::it::chain;
+use crate::wrappers::Ext;
 
 #[test]
 fn product2() {
@@ -278,7 +282,7 @@ fn part() {
 #[test]
 fn tree_fold1() {
     for i in 0..100 {
-        assert_eq!((0..i).tree_fold1(|x, y| x + y), (0..i).fold1(|x, y| x + y));
+        assert_eq!((0..i).tree_fold1(|x, y| x + y), (0..i).fold1_wrap(|x, y| x + y));
     }
 }
 
