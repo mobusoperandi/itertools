@@ -205,7 +205,7 @@ impl<I> Iterator for MultiProduct<I>
 
         self.0.iter().fold(
             (0, Some(0)),
-            |acc, &MultiProductIter { ref iter, ref iter_orig, cur: _ }| {
+            |acc, MultiProductIter { iter, iter_orig, cur: _ }| {
                 let cur_size = iter.size_hint();
                 let total_size = iter_orig.size_hint();
                 size_hint::add(size_hint::mul(acc, total_size), cur_size)

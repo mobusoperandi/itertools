@@ -475,6 +475,8 @@ fn merge_default(c: &mut Criterion) {
     let mut data1 = vec![0; 1024];
     let mut data2 = vec![0; 800];
     let mut x = 0;
+
+    #[allow(clippy::explicit_counter_loop)]
     for (_, elt) in data1.iter_mut().enumerate() {
         *elt = x;
         x += 1;
@@ -503,6 +505,8 @@ fn merge_by_cmp(c: &mut Criterion) {
     let mut data1 = vec![0; 1024];
     let mut data2 = vec![0; 800];
     let mut x = 0;
+
+    #[allow(clippy::explicit_counter_loop)]
     for (_, elt) in data1.iter_mut().enumerate() {
         *elt = x;
         x += 1;
@@ -531,6 +535,8 @@ fn merge_by_lt(c: &mut Criterion) {
     let mut data1 = vec![0; 1024];
     let mut data2 = vec![0; 800];
     let mut x = 0;
+
+    #[allow(clippy::explicit_counter_loop)]
     for (_, elt) in data1.iter_mut().enumerate() {
         *elt = x;
         x += 1;
@@ -559,6 +565,8 @@ fn kmerge_default(c: &mut Criterion) {
     let mut data1 = vec![0; 1024];
     let mut data2 = vec![0; 800];
     let mut x = 0;
+
+    #[allow(clippy::explicit_counter_loop)]
     for (_, elt) in data1.iter_mut().enumerate() {
         *elt = x;
         x += 1;
@@ -600,7 +608,7 @@ fn kmerge_tenway(c: &mut Criterion) {
 
     let mut chunks = Vec::new();
     let mut rest = &mut data[..];
-    while rest.len() > 0 {
+    while !rest.is_empty() {
         let chunk_len = 1 + rng(&mut state) % 512;
         let chunk_len = cmp::min(rest.len(), chunk_len as usize);
         let (fst, tail) = {rest}.split_at_mut(chunk_len);

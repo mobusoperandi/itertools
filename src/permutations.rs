@@ -247,8 +247,8 @@ impl CompleteState {
                     return Known(0);
                 }
 
-                let count: Option<usize> = (n - k + 1..n + 1).fold(Some(1), |acc, i| {
-                    acc.and_then(|acc| acc.checked_mul(i))
+                let count: Option<usize> = (n - k + 1..n + 1).try_fold(1usize, |acc, i| {
+                    acc.checked_mul(i)
                 });
 
                 match count {

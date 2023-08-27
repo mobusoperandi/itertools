@@ -211,8 +211,8 @@ fn remaining_for(n: usize, first: bool, indices: &[usize]) -> Option<usize> {
             // TODO: Once the MSRV hits 1.37.0, we can sum options instead:
             // .map(|(i, n0)| checked_binomial(n - 1 - *n0, k - i))
             // .sum()
-            .fold(Some(0), |sum, (i, n0)| {
-                sum.and_then(|s| s.checked_add(checked_binomial(n - 1 - *n0, k - i)?))
+            .try_fold(0usize, |sum, (i, n0)| {
+                sum.checked_add(checked_binomial(n - 1 - *n0, k - i)?)
             })
     }
 }

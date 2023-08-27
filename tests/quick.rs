@@ -817,9 +817,8 @@ quickcheck! {
 quickcheck! {
     fn size_put_back(a: Vec<u8>, x: Option<u8>) -> bool {
         let mut it = put_back(a.into_iter());
-        match x {
-            Some(t) => it.put_back(t),
-            None => {}
+        if let Some(t) = x {
+            it.put_back(t)
         }
         correct_size_hint(it)
     }
@@ -918,7 +917,7 @@ quickcheck! {
                 }
             }
         }
-        cmb.next() == None
+        cmb.next().is_none()
     }
 }
 
@@ -1205,7 +1204,7 @@ struct Val(u32, u32);
 
 impl PartialOrd<Val> for Val {
     fn partial_cmp(&self, other: &Val) -> Option<Ordering> {
-        self.0.partial_cmp(&other.0)
+        Some(self.cmp(other))
     }
 }
 
@@ -1308,7 +1307,7 @@ quickcheck! {
     fn at_most_one_i32(a: Vec<i32>) -> TestResult {
         let ret = a.iter().cloned().at_most_one();
         match a.len() {
-            0 => TestResult::from_bool(ret.unwrap() == None),
+            0 => TestResult::from_bool(ret.unwrap().is_none()),
             1 => TestResult::from_bool(ret.unwrap() == Some(a[0])),
             _ => TestResult::from_bool(ret.unwrap_err().eq(a.iter().cloned())),
         }
