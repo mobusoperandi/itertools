@@ -8,7 +8,8 @@ use criterion::{criterion_group, criterion_main, Criterion};
 struct Unspecialized<I>(I);
 
 impl<I> Iterator for Unspecialized<I>
-where I: Iterator
+where
+    I: Iterator,
 {
     type Item = I::Item;
 
@@ -29,8 +30,7 @@ mod specialization {
     pub mod intersperse {
         use super::*;
 
-        pub fn external(c: &mut Criterion)
-        {
+        pub fn external(c: &mut Criterion) {
             let arr = [1; 1024];
 
             c.bench_function("external", move |b| {
@@ -44,8 +44,7 @@ mod specialization {
             });
         }
 
-        pub fn internal_specialized(c: &mut Criterion)
-        {
+        pub fn internal_specialized(c: &mut Criterion) {
             let arr = [1; 1024];
 
             c.bench_function("internal specialized", move |b| {
@@ -56,8 +55,7 @@ mod specialization {
             });
         }
 
-        pub fn internal_unspecialized(c: &mut Criterion)
-        {
+        pub fn internal_unspecialized(c: &mut Criterion) {
             let arr = [1; 1024];
 
             c.bench_function("internal unspecialized", move |b| {

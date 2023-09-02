@@ -2,8 +2,8 @@
 mod wrappers;
 
 use itertools::Itertools;
-use std::fmt::Debug;
 use quickcheck::quickcheck;
+use std::fmt::Debug;
 
 use crate::wrappers::Ext;
 
@@ -29,12 +29,11 @@ macro_rules! check_specialized {
         let v2 = $closure;
 
         assert_eq!(v1, v2);
-    }
+    };
 }
 
-fn test_specializations<IterItem, Iter>(
-    it: &Iter,
-) where
+fn test_specializations<IterItem, Iter>(it: &Iter)
+where
     IterItem: Eq + Debug + Clone,
     Iter: Iterator<Item = IterItem> + Clone,
 {
@@ -55,7 +54,7 @@ fn test_specializations<IterItem, Iter>(
         let first = i.next();
         let all_result = i.all(|x| {
             parameters_from_all.push(x.clone());
-            Some(x)==first
+            Some(x) == first
         });
         (parameters_from_all, all_result)
     });

@@ -8,8 +8,9 @@ pub mod free {
     // it seems the compiler is not able to discern that this is used
     #[allow(dead_code)]
     pub fn zip<I, J>(i: I, j: J) -> core::iter::Zip<I::IntoIter, J::IntoIter>
-        where I: IntoIterator,
-              J: IntoIterator
+    where
+        I: IntoIterator,
+        J: IntoIterator,
     {
         #[allow(deprecated)]
         itertools::free::zip(i, j)
@@ -26,8 +27,9 @@ pub trait Ext: Itertools {
     }
 
     fn fold1_wrap<F>(self, f: F) -> Option<Self::Item>
-        where F: FnMut(Self::Item, Self::Item) -> Self::Item,
-              Self: Sized,
+    where
+        F: FnMut(Self::Item, Self::Item) -> Self::Item,
+        Self: Sized,
     {
         #[allow(deprecated)]
         <Self as Itertools>::fold1(self, f)
@@ -35,4 +37,3 @@ pub trait Ext: Itertools {
 }
 
 impl<T: Itertools> Ext for T {}
-
